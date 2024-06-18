@@ -13,6 +13,7 @@ export class RestTestService {
 
     return this.httpService.get<TestResponse>('').pipe(
       map((res) => {
+        this.logger.log(`Parsing file Urls`);
         return res.data.items.map<ParsedFile>((item) => {
           const pathParts = item.fileUrl.split('//').pop().split('/');
           const fileName = pathParts.pop();
