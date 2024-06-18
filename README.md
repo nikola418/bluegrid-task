@@ -32,6 +32,12 @@
 $ pnpm install
 ```
 
+## Environment
+
+```bash
+$ cat .example.env > .env
+```
+
 ## Running the app
 
 ```bash
