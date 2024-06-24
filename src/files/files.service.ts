@@ -1,7 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { Observable, from, map, of, switchMap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Directory, DirectoryMembers } from './interfaces';
 import { ParsedFile } from './rest-test/interfaces';
 import { RestTestService } from './rest-test/rest-test.service';
@@ -15,20 +15,11 @@ export class FilesService {
   private readonly logger = new Logger(FilesService.name);
 
   public findAll(): Observable<Directory> {
-    return from(this.cacheManager.get('parsedFileUrls')).pipe(
-      switchMap((val: string) => {
-        if (val)
-          return of(JSON.parse(val)).pipe(
-            map((parsedFileUrls) => this.reconstructFileSystem(parsedFileUrls)),
-          );
-
-        return this.restTestService
-          .getAll()
-          .pipe(
-            map((parsedFileUrls) => this.reconstructFileSystem(parsedFileUrls)),
-          );
-      }),
-    );
+    return this.restTestService
+      .getAll()
+      .pipe(
+        map((parsedFileUrls) => this.reconstructFileSystem(parsedFileUrls)),
+      );
   }
 
   private reconstructFileSystem(parsedFileUrls: ParsedFile[]): Directory {

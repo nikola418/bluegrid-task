@@ -19,7 +19,7 @@ export class RestTestService {
     return this.httpService.get<TestResponse>('').pipe(
       map((res) => {
         this.logger.log(`Parsing file Urls`);
-        const parsedFileUrls = res.data.items.map<ParsedFile>((item) => {
+        return res.data.items.map<ParsedFile>((item) => {
           const pathParts = item.fileUrl.split('//').pop().split('/');
           const fileName = pathParts.pop();
           const ipAddress = pathParts.shift().split(':').shift();
@@ -30,13 +30,6 @@ export class RestTestService {
             fileName: fileName !== '' ? fileName : undefined,
           };
         });
-        this.logger.log('Caching parsed file Urls');
-        this.cacheManager.set(
-          'parsedFileUrls',
-          JSON.stringify(parsedFileUrls),
-          1000 * 3600 * 24, //ttl: 1 day
-        );
-        return parsedFileUrls;
       }),
     );
   }

@@ -1,7 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { RestTestService } from './rest-test.service';
-import { TasksService } from './tasks.service';
 
 @Module({
   imports: [
@@ -9,7 +8,7 @@ import { TasksService } from './tasks.service';
       baseURL: 'https://rest-test-eight.vercel.app/api/test',
     }),
   ],
-  providers: [RestTestService, TasksService],
+  providers: [RestTestService],
   exports: [RestTestService],
 })
 export class RestTestModule {}
